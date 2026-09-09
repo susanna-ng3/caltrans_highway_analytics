@@ -1,29 +1,52 @@
 """
 app.py - Caltrans Highway Analytics dashboard
 
-Single-page layout combining four analyses, each built from a clean_*.py
+Single-page layout combining eight analyses, each built from a clean_*.py
 output in data/:
   - Highway Mileage by District  (clean_shn_lines.py -> district_mileage.csv)
   - Traffic Volume               (clean_traffic_volume.py -> aadt_by_direction.csv, truck_aadt.csv)
   - Congestion Bottlenecks       (clean_bottlenecks.py -> bottlenecks_joined.csv)
   - Climate Risk Overlay (CCVRA) (clean_ccvra_risk.py -> ccvra_risk_by_district.csv)
+  - District Overview Map        (clean_district_boundaries.py -> district_boundaries.geojson, district_metrics.csv)
+  - Managed Lanes (HOV/Express)  (clean_managed_lanes.py -> managed_lanes_by_district.csv)
+  - Weigh Stations               (clean_weigh_stations.py -> weigh_stations.csv)
+  - Bridges                      (data/bridges_combined.csv - see note below, NOT a clean_*.py output)
 
 Originally three tabs, one per analysis, while each was being built and
 verified independently. Combined onto one scrolling page (agreed with Suz,
-2026-09-09) now that all three (then four) are done: tabs hide the other
+2026-09-08) now that all three (then four) are done: tabs hide the other
 analyses while you're looking at one, which works against the goal of one
 connected dashboard. A shared District filter drives the KPI row and every
-section that carries a District column (which now includes Climate Risk);
-a Route type filter (Traffic Volume and Bottlenecks both carry RouteType
-from the SHN Lines join - Mileage and Climate Risk don't) narrows those two
-sections further. Selecting a specific district doesn't shrink the Mileage
-chart to one bar - it stays a statewide comparison, with the selected
-district highlighted, since that comparison is the point of that panel.
-Traffic Volume, Bottlenecks, and Climate Risk all genuinely filter down to
-the selected district instead, since each is already a per-district
-breakdown rather than a district-vs-district comparison.
+section that carries a District column (which now includes Climate Risk,
+Managed Lanes, Weigh Stations, and Bridges); a Route type filter (Traffic
+Volume and Bottlenecks both carry RouteType from the SHN Lines join - the
+others don't) narrows those two sections further. Selecting a specific
+district doesn't shrink the Mileage chart, the District Overview Map, or
+the Weigh Stations count chart - those three stay statewide comparisons,
+with the selected district highlighted/outlined, since that comparison is
+the point of each panel. Traffic Volume, Bottlenecks, Climate Risk,
+Managed Lanes, Weigh Stations (map only), and Bridges all genuinely filter
+down to the selected district instead, since each is already a
+per-district breakdown rather than a district-vs-district comparison.
+
+Bridges is an intentional exception to this project's "everything is
+pulled live from an ArcGIS FeatureServer, no manual extracts" rule (agreed
+with Suz, 2026-09-09): data/bridges_combined.csv is Suz's own pre-cleaned
+25,862-row State Highway + Local bridge inventory (State Highway =
+maintained by Caltrans, Local = maintained by a city/county but still
+State-owned right-of-way or otherwise tracked in this inventory), the same
+file her separate, already-deployed bridge_dashboard.py reads from
+D:\\Bridges\\Bridges_Combined.csv. That standalone dashboard stays live
+alongside this one (Suz's choice) - this section is a second, integrated
+view of the same data using the shared District filter, not a
+replacement. Its DIST column already uses this project's exact 1-12
+district numbering, so no crosswalk is needed here (unlike Managed
+Lanes' HOV segments). No condition/sufficiency rating exists in this
+source - age and structure type are proxies, not a safety assessment,
+exactly as Suz's original dashboard's caption says.
 """
 
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -66,6 +89,49 @@ RISK_TIER_COLORS = dict(zip(RISK_TIER_ORDER, ORANGE_SEQUENTIAL))
 # first, which reads oddly) - must match CCVRA_LAYERS in clean_ccvra_risk.py.
 HAZARD_ORDER = ["Wildfire", "Landslide", "Riverine Flood", "Coastal Flood"]
 
+# Two more sequential single-hue ramps (light -> dark) for the District
+# Overview Map, generated the same way as ORANGE_SEQUENTIAL: anchored at the
+# shared categorical theme's slot-6 green (#008300) and slot-7 violet
+# (#4a3aa7), matching ORANGE_SEQUENTIAL's exact L/C progression at each new
+# hue, then validated with validate_palette.js --ordinal (all checks pass:
+# monotone lightness, adjacent-step gaps, light-end contrast, single hue).
+# The map reuses BLUE_SEQUENTIAL and ORANGE_SEQUENTIAL for the two metrics
+# that already have an established color elsewhere on this page (Bottleneck
+# Delay, Climate Risk) so "blue = delay" and "orange = climate risk" stay
+# true everywhere they appear; Centerline Miles and Avg. AADT have no such
+# prior meaning, so they get these two new hues instead of reusing blue/
+# orange for something different.
+GREEN_SEQUENTIAL = ["#88c183", "#69ad64", "#4c9947", "#2b8427", "#007000", "#005a00", "#004300"]
+VIOLET_SEQUENTIAL = ["#a7a7f1", "#908ee4", "#7b76d4", "#665ec5", "#5448b1", "#423695", "#312574"]
+
+# Fixed categorical pair for Managed Lanes' lane_type identity (HOV vs.
+# Express Lane) - slots 4 and 5 of the same shared theme RouteType already
+# uses slots 1-3 of (blue/orange/aqua), continuing the fixed order into
+# unused slots rather than reusing blue/orange for a different meaning on
+# the same scrolling page. Validated with validate_palette.js (categorical
+# mode): CVD separation and normal-vision floor both pass; contrast vs.
+# surface WARNs (both colors read light against #fcfcfb), which is why this
+# chart keeps its legend and hover labels rather than relying on color alone.
+LANE_TYPE_COLORS = {"HOV": "#eda100", "Express Lane": "#e87ba4"}
+
+# Fixed categorical pair for Bridges' Bridge_Type identity (State Highway
+# vs. Local) - slots 6 and 7, continuing the same fixed order again.
+# Deliberately NOT blue/orange: Suz's original standalone bridge_dashboard.py
+# colored Bridge_Type with those exact two hexes, but this page already uses
+# blue/orange for RouteType (State/US) - reusing them here for a different
+# categorical meaning on the same scrolling page is exactly the "same color,
+# different meaning" confusion Suz flagged earlier in this project (agreed
+# fix with Suz, 2026-09-09). Slots 6/7's hues (green/violet) are otherwise
+# only anchors for the District Overview Map's *sequential* ramps
+# (GREEN_SEQUENTIAL, VIOLET_SEQUENTIAL) - a continuous-fill choropleth reads
+# differently enough from a solid point-map dot that reusing the hue family
+# doesn't collide, the same precedent already set by blue/orange doing double
+# duty as both RouteType identity and BLUE_SEQUENTIAL/ORANGE_SEQUENTIAL
+# magnitude ramps elsewhere on this page. Validated with validate_palette.js
+# (categorical mode): all checks pass, including contrast vs. surface (unlike
+# LANE_TYPE_COLORS, these don't need to lean on the legend alone).
+BRIDGE_TYPE_COLORS = {"State Highway": "#008300", "Local": "#4a3aa7"}
+
 st.set_page_config(page_title="Caltrans Highway Analytics", layout="wide")
 
 
@@ -85,6 +151,33 @@ truck["DISTRICT"] = pd.to_numeric(truck["DISTRICT"], errors="coerce").astype("In
 ccvra = pd.read_csv(DATA_DIR / "ccvra_risk_by_district.csv")
 ccvra["District"] = pd.to_numeric(ccvra["District"], errors="coerce").astype("Int64")
 ccvra["current_risk"] = pd.Categorical(ccvra["current_risk"], categories=RISK_TIER_ORDER, ordered=True)
+
+with open(DATA_DIR / "district_boundaries.geojson") as _f:
+    district_geojson = json.load(_f)
+
+district_metrics = pd.read_csv(DATA_DIR / "district_metrics.csv")
+district_metrics["District"] = pd.to_numeric(district_metrics["District"], errors="coerce").astype("Int64")
+
+managed_lanes = pd.read_csv(DATA_DIR / "managed_lanes_by_district.csv")
+managed_lanes["District"] = pd.to_numeric(managed_lanes["District"], errors="coerce").astype("Int64")
+
+weigh_stations = pd.read_csv(DATA_DIR / "weigh_stations.csv")
+weigh_stations["District"] = pd.to_numeric(weigh_stations["District"], errors="coerce").astype("Int64")
+
+# Bridges: static input (see module docstring) rather than a clean_*.py
+# output, so its light cleanup lives here instead of a separate script.
+# Mirrors Suz's own bridge_dashboard.py load_data(): one row has no YRBLT
+# and is dropped (can't compute age or decade for it); Decade_Built comes
+# in as a float column purely because that one NaN forces the dtype, so it
+# reverts to int once the row's gone. CURRENT_YEAR is computed from today's
+# date rather than her original script's hardcoded 2026, so Avg. Age doesn't
+# quietly go stale next year.
+bridges = pd.read_csv(DATA_DIR / "bridges_combined.csv")
+bridges = bridges.rename(columns={"DIST": "District"})
+bridges["District"] = pd.to_numeric(bridges["District"], errors="coerce").astype("Int64")
+bridges = bridges.dropna(subset=["YRBLT"])
+bridges["Decade_Built"] = bridges["Decade_Built"].astype(int)
+CURRENT_YEAR = pd.Timestamp.now().year
 
 ALL_DISTRICTS = sorted(
     set(mileage["District"].dropna())
@@ -126,8 +219,14 @@ if district_is_filtered:
     aadt_f = aadt_f[aadt_f["DISTRICT"] == selected_district]
     truck_f = truck_f[truck_f["DISTRICT"] == selected_district]
     ccvra_f = ccvra[ccvra["District"] == selected_district]
+    lanes_f = managed_lanes[managed_lanes["District"] == selected_district]
+    stations_f = weigh_stations[weigh_stations["District"] == selected_district]
+    bridges_f = bridges[bridges["District"] == selected_district]
 else:
     ccvra_f = ccvra
+    lanes_f = managed_lanes
+    stations_f = weigh_stations
+    bridges_f = bridges
 
 
 # ------------------------------------------------------------------- KPI row --
@@ -370,3 +469,339 @@ else:
         bargap=0.3,
     )
     st.plotly_chart(fig_risk, width='stretch', theme=None)
+
+
+# --------------------------------------------------- Row 5: District map --
+
+st.subheader("District Overview Map")
+st.caption(
+    "The four district-level metrics shown elsewhere on this page, mapped onto "
+    "Caltrans' 12 district boundaries so they can be compared geographically "
+    "instead of only bar-by-bar. Selecting a district above outlines it here "
+    "rather than filtering the map, since the point of a map is seeing all 12 "
+    "districts at once."
+)
+
+METRIC_OPTIONS = {
+    "Centerline Miles": ("centerline_miles", GREEN_SEQUENTIAL, "Centerline miles"),
+    "Avg. AADT": ("avg_aadt", VIOLET_SEQUENTIAL, "Avg. AADT"),
+    "Bottleneck Delay (top 10/district)": ("bottleneck_delay_hours", BLUE_SEQUENTIAL, "Delay (veh-hrs)"),
+    "Climate Risk (% High/Med-High)": ("climate_risk_pct", ORANGE_SEQUENTIAL, "% elevated risk"),
+}
+selected_metric_label = st.selectbox("Color map by", list(METRIC_OPTIONS))
+metric_col, metric_ramp, metric_title = METRIC_OPTIONS[selected_metric_label]
+
+if district_metrics[metric_col].isna().any():
+    st.caption(
+        f"⚠ {int(district_metrics[metric_col].isna().sum())} district(s) have no data for "
+        f"\"{selected_metric_label}\" and show unfilled on the map below."
+    )
+
+fig_district_map = px.choropleth_map(
+    district_metrics,
+    geojson=district_geojson,
+    locations="District",
+    featureidkey="properties.District",
+    color=metric_col,
+    color_continuous_scale=metric_ramp,
+    hover_data={"District": True, metric_col: ":,.1f"},
+    labels={metric_col: metric_title},
+    map_style="carto-positron",
+    zoom=4.6,
+    center={"lat": 37.2, "lon": -119.5},
+    opacity=0.85,
+    height=460,
+)
+
+if district_is_filtered:
+    _sel_feature = next(
+        f for f in district_geojson["features"] if f["properties"]["District"] == selected_district
+    )
+    _geom = _sel_feature["geometry"]
+    _rings = _geom["coordinates"] if _geom["type"] == "Polygon" else [r for poly in _geom["coordinates"] for r in poly]
+    _lons, _lats = [], []
+    for _ring in _rings:
+        for _lon, _lat in _ring:
+            _lons.append(_lon)
+            _lats.append(_lat)
+        _lons.append(None)
+        _lats.append(None)
+    fig_district_map.add_scattermap(
+        lon=_lons, lat=_lats, mode="lines",
+        line=dict(width=3, color="#1a1a19"),
+        hoverinfo="skip", showlegend=False,
+    )
+
+fig_district_map.update_layout(
+    font=dict(color="#1a1a19"),
+    margin=dict(l=0, r=0, t=0, b=0),
+    coloraxis_colorbar=dict(title=metric_title),
+)
+st.plotly_chart(fig_district_map, width='stretch', theme=None)
+
+
+# ------------------------------------------- Row 6: Managed Lanes --
+
+st.subheader("Managed Lanes (HOV & Express Lanes)")
+st.caption(
+    "HOV and Express Lane lane-miles per district, shown together rather than as "
+    "two separate charts - many Express Lanes are literally converted HOV lanes "
+    "(several rows in the source data say so directly). HOV segments carry only a "
+    "county in Caltrans' data, not a district, so those are assigned to a district "
+    "via a county-to-district crosswalk built from SHN Lines; Express Lanes carry "
+    "District directly."
+)
+
+if lanes_f.empty:
+    st.info(
+        f"No managed lanes recorded in District {selected_district}."
+        if district_is_filtered else "No managed lane data available."
+    )
+else:
+    fig_lanes = px.bar(
+        lanes_f,
+        x="District",
+        y="lane_miles",
+        color="lane_type",
+        barmode="group",
+        category_orders={"lane_type": list(LANE_TYPE_COLORS)},
+        color_discrete_map=LANE_TYPE_COLORS,
+        labels={"District": "District", "lane_miles": "Lane-miles", "lane_type": "Lane type"},
+    )
+    fig_lanes.update_layout(
+        font=dict(color="#1a1a19"),
+        xaxis=dict(type="category", title="District"),
+        yaxis=dict(title="Lane-miles"),
+        plot_bgcolor="#fcfcfb",
+        paper_bgcolor="#fcfcfb",
+        margin=dict(t=10, b=10),
+        height=380,
+        legend=dict(orientation="h", y=1.15),
+    )
+    st.plotly_chart(fig_lanes, width='stretch', theme=None)
+
+
+# ------------------------------------------- Row 7: Weigh Stations --
+
+st.subheader("Weigh Stations (Commercial Vehicle Enforcement)")
+st.caption(
+    "Truck weigh/inspection station locations from Caltrans' Vehicle Enforcement "
+    "Facilities layer. Kept simple for now - a per-district count and a location "
+    "map, not yet cross-referenced against Truck AADT corridors for a coverage "
+    "analysis."
+)
+
+ws_col1, ws_col2 = st.columns([1, 2])
+
+with ws_col1:
+    station_counts = weigh_stations.groupby("District").size().reset_index(name="station_count")
+    ws_bar_colors = [
+        SERIES_BLUE if (not district_is_filtered or d == selected_district) else MUTED_GRAY
+        for d in station_counts["District"]
+    ]
+    fig_ws_count = px.bar(
+        station_counts,
+        x="District",
+        y="station_count",
+        labels={"District": "District", "station_count": "Stations"},
+    )
+    fig_ws_count.update_traces(marker_color=ws_bar_colors)
+    fig_ws_count.update_layout(
+        font=dict(color="#1a1a19"),
+        xaxis=dict(type="category", title="District"),
+        yaxis=dict(title="Stations"),
+        plot_bgcolor="#fcfcfb",
+        paper_bgcolor="#fcfcfb",
+        margin=dict(t=10, b=10),
+        height=360,
+    )
+    st.plotly_chart(fig_ws_count, width='stretch', theme=None)
+
+with ws_col2:
+    if stations_f.empty:
+        st.info(f"No weigh stations recorded in District {selected_district}.")
+    else:
+        if district_is_filtered:
+            _map_center = {"lat": stations_f["Latitude"].mean(), "lon": stations_f["Longitude"].mean()}
+            _map_zoom = 6.5
+        else:
+            _map_center = {"lat": 37.2, "lon": -119.5}
+            _map_zoom = 4.6
+
+        fig_ws_map = px.scatter_map(
+            stations_f,
+            lat="Latitude",
+            lon="Longitude",
+            hover_name="FACILITY_NAME",
+            hover_data={
+                "District": True, "ROUTE": True, "DIRECTION": True,
+                "Latitude": False, "Longitude": False,
+            },
+            color_discrete_sequence=[SERIES_BLUE],
+            zoom=_map_zoom,
+            center=_map_center,
+            height=360,
+            map_style="carto-positron",
+        )
+        fig_ws_map.update_traces(marker=dict(size=11))
+        fig_ws_map.update_layout(
+            font=dict(color="#1a1a19"),
+            margin=dict(l=0, r=0, t=0, b=0),
+        )
+        st.plotly_chart(fig_ws_map, width='stretch', theme=None)
+
+
+# ------------------------------------------------------- Row 8: Bridges --
+
+st.subheader("Bridges")
+st.caption(
+    "State Highway + Local bridges, from Suz's own Caltrans GIS Data Hub "
+    "extract (data/bridges_combined.csv - a static input, unlike every other "
+    "section on this page; see the module docstring). No condition/"
+    "sufficiency rating exists in this source - age and structure type are "
+    "used as proxies, not a safety assessment. This is a second, integrated "
+    "view of the same data as Suz's standalone bridge dashboard "
+    "(caltransbridgedashboard.streamlit.app), which stays live separately."
+)
+
+if bridges_f.empty:
+    st.info(
+        f"No bridges recorded in District {selected_district}."
+        if district_is_filtered else "No bridge data available."
+    )
+else:
+    pre_1970 = (bridges_f["YRBLT"] < 1970).sum()
+    avg_age = (CURRENT_YEAR - bridges_f["YRBLT"]).mean()
+
+    bkpi1, bkpi2, bkpi3, bkpi4, bkpi5 = st.columns(5)
+    bkpi1.metric("Total Bridges", f"{len(bridges_f):,}")
+    bkpi2.metric("State Highway", f"{(bridges_f['Bridge_Type'] == 'State Highway').sum():,}")
+    bkpi3.metric("Local", f"{(bridges_f['Bridge_Type'] == 'Local').sum():,}")
+    bkpi4.metric("Avg. Age (yrs)", f"{avg_age:,.0f}")
+    bkpi5.metric(
+        "Built Before 1970", f"{pre_1970:,}",
+        help="Common reference point for design-life review, not a condition rating.",
+    )
+
+    bridge_map_col, bridge_dist_col = st.columns([1.3, 1])
+
+    with bridge_map_col:
+        st.caption("Bridge Locations")
+        if district_is_filtered:
+            _b_center = {"lat": bridges_f["LAT"].mean(), "lon": bridges_f["LON"].mean()}
+            _b_zoom = 6.5
+        else:
+            _b_center = {"lat": 37.2, "lon": -119.5}
+            _b_zoom = 4.6
+
+        fig_bridge_map = px.scatter_map(
+            bridges_f,
+            lat="LAT",
+            lon="LON",
+            color="Bridge_Type",
+            color_discrete_map=BRIDGE_TYPE_COLORS,
+            category_orders={"Bridge_Type": list(BRIDGE_TYPE_COLORS)},
+            hover_name="NAME",
+            hover_data={
+                "District": True, "County_Name": True, "YRBLT": True,
+                "LAT": False, "LON": False,
+            },
+            labels={"Bridge_Type": "Bridge type"},
+            center=_b_center,
+            zoom=_b_zoom,
+            height=460,
+            opacity=0.6,
+            map_style="carto-positron",
+        )
+        fig_bridge_map.update_layout(
+            font=dict(color="#1a1a19"),
+            margin=dict(l=0, r=0, t=0, b=0),
+            legend=dict(orientation="h", y=1.05),
+        )
+        st.plotly_chart(fig_bridge_map, width='stretch', theme=None)
+
+    with bridge_dist_col:
+        st.caption("Bridges by District")
+        dist_counts = bridges_f.groupby("District", observed=True).size().reset_index(name="bridge_count")
+        fig_bridge_dist = px.bar(
+            dist_counts,
+            x="bridge_count",
+            y="District",
+            orientation="h",
+            color_discrete_sequence=[SERIES_BLUE],
+            labels={"bridge_count": "Bridges", "District": ""},
+        )
+        fig_bridge_dist.update_layout(
+            font=dict(color="#1a1a19"),
+            yaxis=dict(type="category", autorange="reversed"),
+            xaxis=dict(title="Bridges"),
+            plot_bgcolor="#fcfcfb",
+            paper_bgcolor="#fcfcfb",
+            margin=dict(t=10, b=10),
+            height=460,
+            showlegend=False,
+        )
+        st.plotly_chart(fig_bridge_dist, width='stretch', theme=None)
+
+    bridge_decade_col, bridge_material_col = st.columns(2)
+
+    with bridge_decade_col:
+        st.caption("Bridges by Decade Built")
+        decade_counts = bridges_f.groupby("Decade_Built", as_index=False).size()
+        fig_bridge_decade = px.bar(
+            decade_counts,
+            x="Decade_Built",
+            y="size",
+            color_discrete_sequence=[SERIES_BLUE],
+            labels={"Decade_Built": "Decade built", "size": "Bridges"},
+        )
+        fig_bridge_decade.update_layout(
+            font=dict(color="#1a1a19"),
+            xaxis=dict(title="Decade built"),
+            yaxis=dict(title="Bridges"),
+            plot_bgcolor="#fcfcfb",
+            paper_bgcolor="#fcfcfb",
+            margin=dict(t=10, b=10),
+            height=360,
+            showlegend=False,
+        )
+        st.plotly_chart(fig_bridge_decade, width='stretch', theme=None)
+
+    with bridge_material_col:
+        st.caption("Bridges by Primary Material")
+        mat_counts = (
+            bridges_f["MATERIAL_MAIN"].value_counts()
+            .rename_axis("Material").reset_index(name="count")
+            .head(8)
+        )
+        fig_bridge_mat = px.bar(
+            mat_counts,
+            x="count",
+            y="Material",
+            orientation="h",
+            color_discrete_sequence=[SERIES_BLUE],
+            labels={"count": "Bridges", "Material": ""},
+        )
+        fig_bridge_mat.update_layout(
+            font=dict(color="#1a1a19"),
+            # automargin: MATERIAL_MAIN's source values are long ("2: Concrete
+            # Cont[inuous]", "0: Prstr[essed] Conc[rete] Cont[inuous]") and get
+            # clipped against the fixed left margin below without this.
+            yaxis=dict(autorange="reversed", automargin=True),
+            xaxis=dict(title="Bridges"),
+            plot_bgcolor="#fcfcfb",
+            paper_bgcolor="#fcfcfb",
+            margin=dict(t=10, b=10),
+            height=360,
+            showlegend=False,
+        )
+        st.plotly_chart(fig_bridge_mat, width='stretch', theme=None)
+
+    st.caption("15 Oldest Bridges" + (f" (District {selected_district})" if district_is_filtered else " (Statewide)"))
+    oldest = (
+        bridges_f.sort_values("YRBLT")
+        .loc[:, ["NAME", "Bridge_Type", "District", "County_Name", "YRBLT", "MATERIAL_MAIN", "DESIGN_MAIN"]]
+        .head(15)
+        .rename(columns={"YRBLT": "Year Built"})
+    )
+    st.dataframe(oldest, width='stretch', hide_index=True)
