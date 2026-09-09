@@ -1,0 +1,215 @@
+hazard,District,current_risk,segment_count
+Coastal Flood,1,Negligible,17928
+Coastal Flood,1,Very Low,40
+Coastal Flood,1,Low,70
+Coastal Flood,2,Negligible,34374
+Coastal Flood,3,Negligible,28755
+Coastal Flood,4,Negligible,26063
+Coastal Flood,4,Very Low,45
+Coastal Flood,4,Low,41
+Coastal Flood,4,Low-Medium,95
+Coastal Flood,4,Medium,16
+Coastal Flood,4,Medium-High,17
+Coastal Flood,5,Negligible,22313
+Coastal Flood,6,Negligible,40190
+Coastal Flood,7,Negligible,20134
+Coastal Flood,7,Very Low,18
+Coastal Flood,7,Low,3
+Coastal Flood,7,Low-Medium,4
+Coastal Flood,7,Medium,10
+Coastal Flood,8,Negligible,35234
+Coastal Flood,9,Negligible,14784
+Coastal Flood,10,Negligible,25893
+Coastal Flood,11,Negligible,20150
+Coastal Flood,12,Negligible,5221
+Coastal Flood,12,Very Low,5
+Coastal Flood,12,Low,32
+Coastal Flood,12,Low-Medium,3
+Coastal Flood,12,Medium,5
+Landslide,1,Negligible,3665
+Landslide,1,Low-Medium,2286
+Landslide,1,Medium,4021
+Landslide,1,Medium-High,6097
+Landslide,1,High,1971
+Landslide,2,Negligible,14110
+Landslide,2,Low-Medium,6145
+Landslide,2,Medium,9166
+Landslide,2,Medium-High,3900
+Landslide,2,High,1053
+Landslide,3,Negligible,17906
+Landslide,3,Low-Medium,3124
+Landslide,3,Medium,6084
+Landslide,3,Medium-High,1249
+Landslide,3,High,392
+Landslide,4,Negligible,12772
+Landslide,4,Low-Medium,2165
+Landslide,4,Medium,6971
+Landslide,4,Medium-High,2511
+Landslide,4,High,1865
+Landslide,5,Negligible,8102
+Landslide,5,Low-Medium,1892
+Landslide,5,Medium,6791
+Landslide,5,Medium-High,3024
+Landslide,5,High,2504
+Landslide,6,Negligible,29916
+Landslide,6,Low-Medium,2338
+Landslide,6,Medium,6433
+Landslide,6,Medium-High,809
+Landslide,6,High,694
+Landslide,7,Negligible,9585
+Landslide,7,Low-Medium,795
+Landslide,7,Medium,5513
+Landslide,7,Medium-High,2441
+Landslide,7,High,1847
+Landslide,8,Negligible,22431
+Landslide,8,Low-Medium,1234
+Landslide,8,Medium,9363
+Landslide,8,Medium-High,1202
+Landslide,8,High,1004
+Landslide,9,Negligible,8143
+Landslide,9,Low-Medium,945
+Landslide,9,Medium,4326
+Landslide,9,Medium-High,803
+Landslide,9,High,567
+Landslide,10,Negligible,15289
+Landslide,10,Low-Medium,3946
+Landslide,10,Medium,5312
+Landslide,10,Medium-High,1241
+Landslide,10,High,105
+Landslide,11,Negligible,12108
+Landslide,11,Low-Medium,1913
+Landslide,11,Medium,4878
+Landslide,11,Medium-High,815
+Landslide,11,High,439
+Landslide,12,Negligible,2805
+Landslide,12,Low-Medium,269
+Landslide,12,Medium,1171
+Landslide,12,Medium-High,537
+Landslide,12,High,484
+Riverine Flood,1,Negligible,15751
+Riverine Flood,1,Very Low,102
+Riverine Flood,1,Low,813
+Riverine Flood,1,Low-Medium,65
+Riverine Flood,1,Medium,1309
+Riverine Flood,2,Negligible,31270
+Riverine Flood,2,Very Low,184
+Riverine Flood,2,Low,1502
+Riverine Flood,2,Low-Medium,136
+Riverine Flood,2,Medium,1282
+Riverine Flood,3,Negligible,21990
+Riverine Flood,3,Very Low,631
+Riverine Flood,3,Low,5178
+Riverine Flood,3,Low-Medium,52
+Riverine Flood,3,Medium,904
+Riverine Flood,4,Negligible,21239
+Riverine Flood,4,Very Low,1600
+Riverine Flood,4,Low,2072
+Riverine Flood,4,Low-Medium,617
+Riverine Flood,4,Medium,756
+Riverine Flood,5,Negligible,19216
+Riverine Flood,5,Very Low,861
+Riverine Flood,5,Low,1045
+Riverine Flood,5,Low-Medium,277
+Riverine Flood,5,Medium,914
+Riverine Flood,6,Negligible,32729
+Riverine Flood,6,Very Low,1917
+Riverine Flood,6,Low,4815
+Riverine Flood,6,Low-Medium,170
+Riverine Flood,6,Medium,559
+Riverine Flood,7,Negligible,18502
+Riverine Flood,7,Very Low,823
+Riverine Flood,7,Low,475
+Riverine Flood,7,Low-Medium,158
+Riverine Flood,7,Medium,223
+Riverine Flood,8,Negligible,33220
+Riverine Flood,8,Very Low,765
+Riverine Flood,8,Low,801
+Riverine Flood,8,Low-Medium,162
+Riverine Flood,8,Medium,286
+Riverine Flood,9,Negligible,13722
+Riverine Flood,9,Very Low,383
+Riverine Flood,9,Low,524
+Riverine Flood,9,Low-Medium,52
+Riverine Flood,9,Medium,103
+Riverine Flood,10,Negligible,22044
+Riverine Flood,10,Very Low,998
+Riverine Flood,10,Low,2441
+Riverine Flood,10,Low-Medium,120
+Riverine Flood,10,Medium,290
+Riverine Flood,11,Negligible,18842
+Riverine Flood,11,Very Low,303
+Riverine Flood,11,Low,513
+Riverine Flood,11,Low-Medium,179
+Riverine Flood,11,Medium,316
+Riverine Flood,12,Negligible,3902
+Riverine Flood,12,Very Low,854
+Riverine Flood,12,Low,147
+Riverine Flood,12,Low-Medium,214
+Riverine Flood,12,Medium,149
+Wildfire,1,Negligible,780
+Wildfire,1,Very Low,659
+Wildfire,1,Low,2322
+Wildfire,1,Low-Medium,3783
+Wildfire,1,Medium,10496
+Wildfire,2,Negligible,3715
+Wildfire,2,Very Low,331
+Wildfire,2,Low,2427
+Wildfire,2,Low-Medium,2768
+Wildfire,2,Medium,24628
+Wildfire,2,Medium-High,505
+Wildfire,3,Negligible,9961
+Wildfire,3,Very Low,1941
+Wildfire,3,Low,4071
+Wildfire,3,Low-Medium,1776
+Wildfire,3,Medium,10992
+Wildfire,3,Medium-High,14
+Wildfire,4,Negligible,10669
+Wildfire,4,Very Low,750
+Wildfire,4,Low,4654
+Wildfire,4,Low-Medium,5173
+Wildfire,4,Medium,5038
+Wildfire,5,Negligible,2048
+Wildfire,5,Very Low,1317
+Wildfire,5,Low,2582
+Wildfire,5,Low-Medium,5277
+Wildfire,5,Medium,11089
+Wildfire,6,Negligible,21133
+Wildfire,6,Very Low,495
+Wildfire,6,Low,6081
+Wildfire,6,Low-Medium,3475
+Wildfire,6,Medium,9006
+Wildfire,7,Negligible,8980
+Wildfire,7,Very Low,355
+Wildfire,7,Low,2221
+Wildfire,7,Low-Medium,2510
+Wildfire,7,Medium,5009
+Wildfire,7,Medium-High,1106
+Wildfire,8,Negligible,6309
+Wildfire,8,Very Low,1115
+Wildfire,8,Low,18988
+Wildfire,8,Low-Medium,1745
+Wildfire,8,Medium,5826
+Wildfire,8,Medium-High,1251
+Wildfire,9,Negligible,363
+Wildfire,9,Very Low,210
+Wildfire,9,Low,8771
+Wildfire,9,Low-Medium,1636
+Wildfire,9,Medium,3804
+Wildfire,10,Negligible,5068
+Wildfire,10,Very Low,1940
+Wildfire,10,Low,4803
+Wildfire,10,Low-Medium,2720
+Wildfire,10,Medium,11328
+Wildfire,10,Medium-High,34
+Wildfire,11,Negligible,5101
+Wildfire,11,Very Low,3221
+Wildfire,11,Low,4809
+Wildfire,11,Low-Medium,1821
+Wildfire,11,Medium,4482
+Wildfire,11,Medium-High,719
+Wildfire,12,Negligible,3414
+Wildfire,12,Very Low,158
+Wildfire,12,Low,470
+Wildfire,12,Low-Medium,251
+Wildfire,12,Medium,789
+Wildfire,12,Medium-High,184

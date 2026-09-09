@@ -1,0 +1,17 @@
+hazard,asset_type,segment_count
+Coastal Flood,Not a Bridge,291467
+Coastal Flood,Culvert,229348
+Coastal Flood,Within 100ft of a Bridge,27665
+Coastal Flood,Bridge,10734
+Landslide,Not a Bridge,291467
+Landslide,Culvert,229348
+Landslide,Within 100ft of a Bridge,27665
+Landslide,Bridge,10734
+Riverine Flood,Not a Bridge,291467
+Riverine Flood,Culvert,229344
+Riverine Flood,Within 100ft of a Bridge,27665
+Riverine Flood,Bridge,10734
+Wildfire,Not a Bridge,291467
+Wildfire,Culvert,229348
+Wildfire,Within 100ft of a Bridge,27665
+Wildfire,Bridge,10734
