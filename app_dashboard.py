@@ -13,7 +13,7 @@ output in data/:
   - Bridges                      (data/bridges_combined.csv - see note below, NOT a clean_*.py output)
 
 Originally three tabs, one per analysis, while each was being built and
-verified independently. Combined onto one scrolling page (agreed with Suz,
+verified independently. Combined onto one scrolling page (agreed with Susanna,
 2026-09-08) now that all three (then four) are done: tabs hide the other
 analyses while you're looking at one, which works against the goal of one
 connected dashboard. A shared District filter drives the KPI row and every
@@ -31,19 +31,19 @@ per-district breakdown rather than a district-vs-district comparison.
 
 Bridges is an intentional exception to this project's "everything is
 pulled live from an ArcGIS FeatureServer, no manual extracts" rule (agreed
-with Suz, 2026-09-09): data/bridges_combined.csv is Suz's own pre-cleaned
+with Susanna, 2026-09-09): data/bridges_combined.csv is Susanna's own pre-cleaned
 25,862-row State Highway + Local bridge inventory (State Highway =
 maintained by Caltrans, Local = maintained by a city/county but still
 State-owned right-of-way or otherwise tracked in this inventory), the same
 file her separate, already-deployed bridge_dashboard.py reads from
 D:\\Bridges\\Bridges_Combined.csv. That standalone dashboard stays live
-alongside this one (Suz's choice) - this section is a second, integrated
+alongside this one (Susanna's choice) - this section is a second, integrated
 view of the same data using the shared District filter, not a
 replacement. Its DIST column already uses this project's exact 1-12
 district numbering, so no crosswalk is needed here (unlike Managed
 Lanes' HOV segments). No condition/sufficiency rating exists in this
 source - age and structure type are proxies, not a safety assessment,
-exactly as Suz's original dashboard's caption says.
+exactly as Susanna's original dashboard's caption says.
 """
 
 import json
@@ -116,12 +116,12 @@ LANE_TYPE_COLORS = {"HOV": "#eda100", "Express Lane": "#e87ba4"}
 
 # Fixed categorical pair for Bridges' Bridge_Type identity (State Highway
 # vs. Local) - slots 6 and 7, continuing the same fixed order again.
-# Deliberately NOT blue/orange: Suz's original standalone bridge_dashboard.py
+# Deliberately NOT blue/orange: Susanna's original standalone bridge_dashboard.py
 # colored Bridge_Type with those exact two hexes, but this page already uses
 # blue/orange for RouteType (State/US) - reusing them here for a different
 # categorical meaning on the same scrolling page is exactly the "same color,
-# different meaning" confusion Suz flagged earlier in this project (agreed
-# fix with Suz, 2026-09-09). Slots 6/7's hues (green/violet) are otherwise
+# different meaning" confusion Susanna flagged earlier in this project (agreed
+# fix with Susanna, 2026-09-09). Slots 6/7's hues (green/violet) are otherwise
 # only anchors for the District Overview Map's *sequential* ramps
 # (GREEN_SEQUENTIAL, VIOLET_SEQUENTIAL) - a continuous-fill choropleth reads
 # differently enough from a solid point-map dot that reusing the hue family
@@ -166,7 +166,7 @@ weigh_stations["District"] = pd.to_numeric(weigh_stations["District"], errors="c
 
 # Bridges: static input (see module docstring) rather than a clean_*.py
 # output, so its light cleanup lives here instead of a separate script.
-# Mirrors Suz's own bridge_dashboard.py load_data(): one row has no YRBLT
+# Mirrors Susanna's own bridge_dashboard.py load_data(): one row has no YRBLT
 # and is dropped (can't compute age or decade for it); Decade_Built comes
 # in as a float column purely because that one NaN forces the dtype, so it
 # reverts to int once the row's gone. CURRENT_YEAR is computed from today's
@@ -655,12 +655,12 @@ with ws_col2:
 
 st.subheader("Bridges")
 st.caption(
-    "State Highway + Local bridges, from Suz's own Caltrans GIS Data Hub "
+    "State Highway + Local bridges, from Susanna's own Caltrans GIS Data Hub "
     "extract (data/bridges_combined.csv - a static input, unlike every other "
     "section on this page; see the module docstring). No condition/"
     "sufficiency rating exists in this source - age and structure type are "
     "used as proxies, not a safety assessment. This is a second, integrated "
-    "view of the same data as Suz's standalone bridge dashboard "
+    "view of the same data as Susanna's standalone bridge dashboard "
     "(caltransbridgedashboard.streamlit.app), which stays live separately."
 )
 
