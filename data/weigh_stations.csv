@@ -1,0 +1,54 @@
+OBJECTID,FACILITY_NAME,ROUTE,DIRECTION,LOCATION,COUNTY,POST_MILE,District,Latitude,Longitude
+2,BUCKHORN,299.0,Westbound,7.4 miles East of Junction of Hwy 101,Humboldt,R7.38,1,40.884478,-123.96298
+1,LITTLE RIVER,101.0,Southbound,8.8 miles North of Junction of Hwy 299,Humboldt,R97.14,1,41.015355,-124.107715
+3,RIDGEWOOD,101.0,Southbound,5 miles South of Junction of Hwy 20,Mendocino,41.17,1,39.34316,-123.317377
+5,COTTONWOOD,5.0,Northbound,12.5 miles North of Junction of Hwy 36,Tehama,40.46,2,40.352284,-122.281179
+6,COTTONWOOD,5.0,Southbound,12.8 miles North of Junction of Hwy 36,Tehama,40.74,2,40.356295,-122.283688
+4,DUNSMUIR GRADE,5.0,Southbound,1.6 miles South of Junction of Hwy 89,Siskiyou,R6.98,2,41.270751,-122.280801
+8,KEDDIE,70.0,Westbound,0.1 miles west of Junction of Hwy 89,Plumas,32.97,2,40.038024,-120.984706
+7,WHISKEYTOWN,299.0,Eastbound,1.2 miles West of Whiskey town(Exit:- Whiskey Creek Rd),Shasta,12.74,2,40.646492,-122.57568
+10,ANTELOPE,80.0,Westbound,6.3 miles west of Junction of Hwy 65 (Roseville),Sacramento,15.81,3,38.698098,-121.320651
+11,ANTELOPE,80.0,Eastbound,6.1 miles west of Junction of Hwy 65 (Roseville),Sacramento,16.04,3,38.700029,-121.316889
+12,CAMINO,50.0,Westbound,4.3 miles West of Pollock Pines,El Dorado,R27.18,3,38.744415,-120.646757
+9,DONNER PASS,80.0,Westbound,2.7 miles east of Junction of Hwy 89/267 (Truckee),Nevada,19.24,3,39.362026,-120.131269
+13,CORDELIA,80.0,Eastbound,1.9 miles East of Junction of Hwy 680 (Cordelia),Solano,14.8,4,38.232205,-122.108045
+14,CORDELIA,80.0,Westbound,1.4 miles East of Junction of Hwy 680 (Cordelia),Solano,14.29,4,38.229725,-122.116952
+18,GILROY,101.0,Southbound,1.3 miles South of Junction of Hwy 152 (Leavesley Rd),Santa Clara,R8.88,4,37.040134,-121.576896
+19,GILROY,101.0,Northbound,3.8 miles South of Junction of Hwy 152 (Leavesley Rd),Santa Clara,R11.34,4,37.074024,-121.591038
+24,LIVERMORE,580.0,Westbound,11.5 miles East of Junction of Hwy 680 ,Alameda,R9.00,4,37.714283,-121.712496
+25,LIVERMORE,580.0,Eastbound,11.5 miles East of Junction of Hwy 680 ,Alameda.,R9.08,4,37.712942,-121.713509
+15,MISSION GRADE,680.0,Eastbound,2.4 miles East of Junction of Hwy 238 (Mission Blvd),Alameda,R8.83,4,37.566,-121.897324
+16,NIMITZ,880.0,Northbound,1.7 miles North of Junction of Hwy 238 (Mission Blvd),Alameda,4.01,4,37.499756,-121.958729
+17,NIMITZ,880.0,Southbound,1.7 miles North of Junction of Hwy 238 (Mission Blvd),Alameda,3.95,4,37.50001,-121.957172
+20,ST. VINCENTS,101.0,Southbound,3.8 miles South of Junction of Hwy 37,Marin,15.2,4,38.028252,-122.538099
+21,TERRA LINDA,101.0,Northbound,4.8 miles South of Junction of Hwy 37,Marin,14.17,4,38.013586,-122.541556
+22,WALNUT CREEK,680.0,Southbound,2.0 miles South of Junction of Hwy 242,Contra Costa,16.6,4,37.929379,-122.060776
+23,WALNUT CREEK,680.0,Northbound,2.2 miles South of Junction of Hwy 242,Contra Costa,16.35,4,37.925638,-122.060268
+26,GRAPEVINE,5.0,Southbound,4.6 miles South of Junction of Hwy 99,Kern,11.7,6,34.96051,-118.937794
+30,CARSON,405.0,Northbound,0.9 miles South of Junction of Hwy 110,Los Angles,11.81,7,33.845972,-118.269448
+31,CARSON,405.0,Southbound,0.8 miles South of Junction of Hwy 110,Los Angles,12.06,7,33.847826,-118.273126
+27,CASTAIC,5.0,Northbound,9 miles North of Junction of Hwy 14,Los Angles,R54.54,7,34.435776,-118.592976
+28,CONEJO,101.0,Northbound,6 miles North of Junction of Hwy 23,Ventura,9.13,7,34.2005,-118.956661
+29,CONEJO,101.0,Southbound,5.9 miles North of Junction of Hwy 23,Ventura,9.08,7,34.198578,-118.957148
+34,BLACK ROCK,10.0,Westbound,4.8 miles West of Junction of Hwy 78,Riverside,R144.30,8,33.609707,-114.741397
+37,CAJON,15.0,Northbound,0.7 miles South of Junction of Hwy 138,San Bernardino,R20.75,8,34.305917,-117.466678
+32,DESERT HILLS,10.0,Westbound,2.8 miles East of Junction of Hwy 243 (Banning),Riverside,R15.67,8,33.930494,-116.837244
+33,DESERT HILLS,10.0,Eastbound,2.8 miles East of Junction of Hwy 243 (Banning),Riverside,R15.66,8,33.929706,-116.837049
+35,MOUNTAIN PASS,15.0,Southbound,7.6 miles West of California/Nevada State line,San Bernardino,178.57,8,35.502466,-115.437165
+36,RAINBOW,15.0,Northbound,2.3 miles South of Junction of Hwy 79,Riverside,R1.11,8,33.447168,-117.135233
+38,CACHE CREEK,58.0,Westbound,5.6 miles West of Junction of Hwy 14,Kern,105.6,9,35.113309,-118.23581
+39,KEENE,58.0,Eastbound,5.4 miles East of Junction of Hwy 223,Kern,80.99,9,35.235855,-118.576508
+43,CHOWCHILLA RIVER,99.0,Northbound,3.5 miles North of Junction of Hwy 233 (Chowchilla Town),Merced,0.63,10,37.159417,-120.297902
+44,LYONS DAM,108.0,Westbound,16.7 miles East of Junction of Hwy 49,Tuolumne,17.18,10,38.078641,-120.164591
+40,MURPHYS,4.0,Westbound,8.6 miles East of Junction of Hwy 49 (Angels Camp),Calaveras,29.71,10,38.1404,-120.454686
+41,SANTA NELLA,5.0,Southbound,1.6 miles North of Junction of Hwy 33,Merced,23.47,10,37.126659,-121.030653
+42,SANTA NELLA,5.0,Northbound,1.7 miles North of Junction of Hwy 33,Merced,23.57,10,37.128406,-121.030706
+47,CALEXICO,7.0,Northbound,0.5 miles North of USA/Mexico Border Line,Imperial,S0.53,11,32.680729,-115.38509
+51,OTAY MESA,,Northbound,0.1 miles North of USA/Mexico Border Line,San Diego,1.4,11,32.554625,-116.926856
+49,RAINBOW,15.0,Southbound,3.7 miles South of Junction of Hwy 79,San Diego,R53.93,11,33.429882,-117.148233
+45,SAN ONOFRE,5.0,Northbound,13.3 miles North of Junction of Hwy 76 (Oceanside),San Diego,R67.25,11,33.352213,-117.524131
+46,SAN ONOFRE,5.0,Southbound,13.3 miles North of Junction of Hwy 76 (Oceanside),San Diego,R67.23,11,33.351524,-117.524756
+50,TECATE,188.0,Northbound,0.6 miles North of USA/Mexico Border Line,San Diego,0.06,11,32.577802,-116.622924
+48,WINTERHAVEN,8.0,Westbound,7.6 miles West of California/Arizona State line,Imperial,R89.35,11,32.747293,-114.743601
+52,PERALTA,91.0,Westbound,2.1 miles East of Junction of Hwy 90,Orange,R13.67L,12,33.869404,-117.757878
+53,PERALTA,91.0,Eastbound,2.1 miles East of Junction of Hwy 90,Orange,R13.73R,12,33.868502,-117.756621
