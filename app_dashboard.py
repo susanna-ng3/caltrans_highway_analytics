@@ -172,6 +172,7 @@ with row1_left:
     )
     fig_mileage.update_traces(marker_color=bar_colors)
     fig_mileage.update_layout(
+        font=dict(color="#1a1a19"),
         xaxis=dict(type="category", title="District"),
         yaxis=dict(title="Centerline miles"),
         plot_bgcolor="#fcfcfb",
@@ -179,7 +180,7 @@ with row1_left:
         margin=dict(t=10, b=10),
         height=360,
     )
-    st.plotly_chart(fig_mileage, width='stretch')
+    st.plotly_chart(fig_mileage, width='stretch', theme=None)
 
 with row1_right:
     top10_title = "Top 10 Busiest AADT Readings" if district_is_filtered else "Busiest AADT Reading per District"
@@ -208,10 +209,12 @@ with row1_right:
             y="AADT",
             color="RouteType",
             color_discrete_map=ROUTE_TYPE_COLORS,
+            category_orders={"RouteType": list(ROUTE_TYPE_COLORS)},
             labels={"location_label": "", "AADT": "AADT", "RouteType": "Route type"},
             hover_data={"DISTRICT": True, "CNTY": True, "DESCRIPTION": True},
         )
         fig_top10.update_layout(
+            font=dict(color="#1a1a19"),
             xaxis=dict(categoryorder="total descending"),
             yaxis=dict(title="AADT"),
             plot_bgcolor="#fcfcfb",
@@ -220,7 +223,7 @@ with row1_right:
             height=360,
             legend=dict(orientation="h", y=1.15),
         )
-        st.plotly_chart(fig_top10, width='stretch')
+        st.plotly_chart(fig_top10, width='stretch', theme=None)
 
 
 # -------------------------------------------- Row 2: Scatter | Bottleneck table --
@@ -244,6 +247,7 @@ with row2_left:
             y="TOT_TRK_AADT",
             color="RouteType",
             color_discrete_map=ROUTE_TYPE_COLORS,
+            category_orders={"RouteType": list(ROUTE_TYPE_COLORS)},
             hover_data={
                 "RTE": True, "CNTY": True, "DISTRICT": True, "TRK_PERCENT_TOT": ":.1f",
                 "VEHICLE_AADT_TOTAL": ":,.0f", "TOT_TRK_AADT": ":,.0f",
@@ -252,13 +256,14 @@ with row2_left:
         )
         fig_scatter.update_traces(marker=dict(size=7, opacity=0.75))
         fig_scatter.update_layout(
+            font=dict(color="#1a1a19"),
             plot_bgcolor="#fcfcfb",
             paper_bgcolor="#fcfcfb",
             margin=dict(t=10, b=10),
             height=380,
             legend=dict(orientation="h", y=1.15),
         )
-        st.plotly_chart(fig_scatter, width='stretch')
+        st.plotly_chart(fig_scatter, width='stretch', theme=None)
 
 with row2_right:
     st.subheader("Congestion Bottlenecks")
@@ -317,10 +322,11 @@ else:
         map_style="carto-positron",
     )
     fig_map.update_layout(
+        font=dict(color="#1a1a19"),
         margin=dict(l=0, r=0, t=0, b=0),
         coloraxis_colorbar=dict(title="Delay<br>(veh-hrs)"),
     )
-    st.plotly_chart(fig_map, width='stretch')
+    st.plotly_chart(fig_map, width='stretch', theme=None)
 
 
 # ---------------------------------------------- Row 4: Climate Risk Overlay --
@@ -355,6 +361,7 @@ else:
         labels={"hazard": "", "segment_count": "Roadway segments", "current_risk": "Current risk"},
     )
     fig_risk.update_layout(
+        font=dict(color="#1a1a19"),
         plot_bgcolor="#fcfcfb",
         paper_bgcolor="#fcfcfb",
         margin=dict(t=10, b=10),
@@ -362,4 +369,4 @@ else:
         legend=dict(orientation="h", y=1.12, traceorder="normal"),
         bargap=0.3,
     )
-    st.plotly_chart(fig_risk, width='stretch')
+    st.plotly_chart(fig_risk, width='stretch', theme=None)
