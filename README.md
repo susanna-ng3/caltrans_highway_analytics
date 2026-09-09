@@ -27,7 +27,7 @@ docstring at the top of `app.py` for the exact filtering behavior per section.
 ## Repo structure
 
 ```
-app.py                          Streamlit dashboard (reads data/*.csv, no live queries)
+app_dashboard.py                          Streamlit dashboard (reads data/*.csv, no live queries)
 
 clean_shn_lines.py               -> data/district_mileage.csv
 clean_bottlenecks.py             -> data/bottlenecks_joined.csv
