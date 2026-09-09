@@ -10,7 +10,7 @@ output in data/:
   - District Overview Map        (clean_district_boundaries.py -> district_boundaries.geojson, district_metrics.csv)
   - Managed Lanes (HOV/Express)  (clean_managed_lanes.py -> managed_lanes_by_district.csv)
   - Weigh Stations               (clean_weigh_stations.py -> weigh_stations.csv)
-  - Bridges                      (data/Bridges_Combined.csv - see note below, NOT a clean_*.py output)
+  - Bridges                      (data/bridges_combined.csv - see note below, NOT a clean_*.py output)
 
 Originally three tabs, one per analysis, while each was being built and
 verified independently. Combined onto one scrolling page (agreed with Suz,
@@ -31,7 +31,7 @@ per-district breakdown rather than a district-vs-district comparison.
 
 Bridges is an intentional exception to this project's "everything is
 pulled live from an ArcGIS FeatureServer, no manual extracts" rule (agreed
-with Suz, 2026-09-09): data/Bridges_Combined.csv is Suz's own pre-cleaned
+with Suz, 2026-09-09): data/bridges_combined.csv is Suz's own pre-cleaned
 25,862-row State Highway + Local bridge inventory (State Highway =
 maintained by Caltrans, Local = maintained by a city/county but still
 State-owned right-of-way or otherwise tracked in this inventory), the same
