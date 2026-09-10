@@ -5,7 +5,7 @@ public ArcGIS REST FeatureServer layers pulled live — no manual downloads, no 
 login, no static extracts checked in except the cleaned outputs the dashboard reads —
 plus one (Bridges) that's an intentional exception; see below.
 
-**Live dashboard:** _add your Streamlit Community Cloud URL here once deployed_
+**Live dashboard:** https://cthighwayanalytics.streamlit.app/
 
 ## What's in it
 
